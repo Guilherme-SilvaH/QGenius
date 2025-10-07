@@ -1,9 +1,5 @@
 package com.qgenius.qgenius_backend.core.domain.valueobject;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.regex.Pattern;
 
 public record Email(String value) {

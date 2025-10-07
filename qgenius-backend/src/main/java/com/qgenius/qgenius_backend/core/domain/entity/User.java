@@ -1,15 +1,13 @@
 package com.qgenius.qgenius_backend.core.domain.entity;
 
+import com.qgenius.qgenius_backend.core.domain.valueobject.Email;
 import com.qgenius.qgenius_backend.core.domain.valueobject.Plan;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Builder
 @Getter

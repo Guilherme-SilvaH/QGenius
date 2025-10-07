@@ -1,10 +1,11 @@
 // Local: com.qgenius.qgenius_backend.core.usecase.user
 
-package com.qgenius.qgenius_backend.core.usecase.user;
+package com.qgenius.qgenius_backend.core.usecase.port.output.user;
 
 import com.qgenius.qgenius_backend.core.domain.entity.User;
 import com.qgenius.qgenius_backend.core.domain.exception.EmailAlreadyExistsException;
-import com.qgenius.qgenius_backend.core.usecase.port.output.IUserRepository;
+import com.qgenius.qgenius_backend.core.usecase.port.input.ICreateUserUseCase;
+import com.qgenius.qgenius_backend.core.usecase.port.input.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,14 @@ public class CreateUserUseCase implements ICreateUserUseCase {
 
     @Override
     public User createUser(User user) {
-        String email = user.getEmail().getAddress();
-
+        String email = String.valueOf(user.getEmail());
         userRepository.findByEmail(email)
                 .ifPresent(existingUser -> {
                     throw new EmailAlreadyExistsException(email);
                 });
 
         String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
-        user.setPasswordHash(hashedPassword)
+        user.setPasswordHash(hashedPassword);
         return userRepository.save(user);
     }
 

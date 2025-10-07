@@ -1,10 +1,9 @@
 package com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.repository;
 
 import com.qgenius.qgenius_backend.core.domain.entity.User;
-import com.qgenius.qgenius_backend.core.usecase.port.output.IUserRepository;
+import com.qgenius.qgenius_backend.core.usecase.port.input.IUserRepository;
 import com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.entity.UserEntity;
 import com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.mapper.UserMapper;
-import com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

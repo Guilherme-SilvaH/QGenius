@@ -1,4 +1,4 @@
-package com.qgenius.qgenius_backend.core.usecase.port.output;
+package com.qgenius.qgenius_backend.core.usecase.port.input;
 
 import com.qgenius.qgenius_backend.core.domain.entity.User;
 
