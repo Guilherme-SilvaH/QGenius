@@ -8,14 +8,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 public class User {
-    @Id
-    private String id;
+    private UUID id;
     private String name;
     private Email email;
     private String passwordHash;

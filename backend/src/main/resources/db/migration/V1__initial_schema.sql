@@ -1,4 +1,3 @@
--- V1__Create_user_and_generation_tables.sql
 
 CREATE TABLE users (
     id UUID PRIMARY KEY,
