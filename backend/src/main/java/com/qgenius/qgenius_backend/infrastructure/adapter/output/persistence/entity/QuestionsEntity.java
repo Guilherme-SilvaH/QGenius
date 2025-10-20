@@ -7,12 +7,12 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "questions")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class QuestionsEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -23,17 +23,21 @@ public class UserEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = 255)
-    private String name;
+    @Column(name = "question", nullable = false, length = 500)
+    private String question;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
-    private String email;
+    @Column(name = "context", columnDefinition = "TEXT")
+    private String context;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
-    private String passwordHash;
+    @Column(name = "theme", nullable = false, length = 100)
+    private String theme;
 
-    @Column(name = "plan", nullable = false, length = 50)
-    private String plan;
+    @Column(name = "custom_theme", length = 255)
+    private String customTheme;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user; // <- apontando para a entidade correta
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();

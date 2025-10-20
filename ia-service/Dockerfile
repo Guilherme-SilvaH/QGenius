@@ -5,10 +5,10 @@ FROM node:20-alpine AS deps
 
 WORKDIR /app
 
-# Copiar apenas package.json e package-lock.json
+# Copiar package.json e package-lock.json
 COPY package*.json ./
 
-# Instalar todas as dependências (incluindo dev)
+# Instalar todas dependências (incluindo dev para build)
 RUN npm install
 
 # ========================
@@ -20,11 +20,10 @@ WORKDIR /app
 
 # Copiar node_modules do estágio anterior
 COPY --from=deps /app/node_modules ./node_modules
-
 # Copiar código fonte
 COPY . .
 
-# Build arguments (exemplo: API URL)
+# Build arguments (exemplo: API_URL)
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
@@ -50,10 +49,6 @@ COPY --from=builder --chown=nodejs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nodejs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nodejs:nodejs /app/public ./public
 COPY --from=builder --chown=nodejs:nodejs /app/package.json ./package.json
-
-# Healthcheck opcional
-HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-    CMD curl -f http://localhost:3000/_next/health || exit 1
 
 # Expor porta
 EXPOSE 3000
