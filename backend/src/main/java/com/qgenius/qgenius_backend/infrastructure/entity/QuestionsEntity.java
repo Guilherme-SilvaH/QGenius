@@ -1,4 +1,4 @@
-package com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.entity;
+package com.qgenius.qgenius_backend.infrastructure.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +37,7 @@ public class QuestionsEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user; // <- apontando para a entidade correta
+    private UserEntity user;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();

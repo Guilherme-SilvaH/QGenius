@@ -1,4 +1,4 @@
-package com.qgenius.qgenius_backend.infrastructure.adapter.output.persistence.entity;
+package com.qgenius.qgenius_backend.infrastructure.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
