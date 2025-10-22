@@ -3,10 +3,9 @@ spring:
     name: qgenius-backend
 
   datasource:
-
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/qgenius}
+    username: ${SPRING_DATASOURCE_USERNAME:qgenius}
+    password: ${SPRING_DATASOURCE_PASSWORD:qgenius}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -24,7 +23,7 @@ spring:
     locations: classpath:db/migration
 
 server:
-  port: ${SERVER_PORT}
+  port: ${SERVER_PORT:8080}
 
 logging:
   level:
@@ -33,5 +32,5 @@ logging:
 application:
   security:
     jwt:
-      secret-key: ${JWT_SECRET}
-      expiration: ${APPLICATION_SECURITY_JWT_EXPIRATION}
+      secret-key: ${JWT_SECRET:c3VwZXItc2VndXJvLWRhLWFwbGljYWNhby1xZ2VuaXVzLWJhY2tlbmQtZGV2}
+      expiration: ${APPLICATION_SECURITY_JWT_EXPIRATION:86400000}
