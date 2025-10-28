@@ -5,6 +5,7 @@ import com.qgenius.qgenius_backend.core.domain.exception.EmailAlreadyExistsExcep
 import com.qgenius.qgenius_backend.core.domain.exception.NotUsersExistsException;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.ICreateUserUseCase;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.IUserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,16 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Slf4j
+@AllArgsConstructor
 @Service
 public class CreateUserUseCase implements ICreateUserUseCase {
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public CreateUserUseCase(@Lazy IUserRepository userRepository,
-                             PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional

@@ -1,6 +1,7 @@
 package com.qgenius.qgenius_backend.infrastructure.rest.exception;
 
 import com.qgenius.qgenius_backend.core.domain.exception.EmailAlreadyExistsException;
+import com.qgenius.qgenius_backend.core.domain.exception.NotQuestionsExistsException;
 import com.qgenius.qgenius_backend.core.domain.exception.NotUsersExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
         log.error("Email already exists: {}", ex.getMessage());
 
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(NotQuestionsExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExists(NotQuestionsExistsException ex) {
+        log.error(ex.getMessage());
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())

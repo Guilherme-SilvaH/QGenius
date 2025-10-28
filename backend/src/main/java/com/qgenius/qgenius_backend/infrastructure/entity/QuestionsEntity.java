@@ -3,7 +3,8 @@ package com.qgenius.qgenius_backend.infrastructure.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,10 +17,7 @@ public class QuestionsEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
@@ -29,16 +27,27 @@ public class QuestionsEntity {
     @Column(name = "context", columnDefinition = "TEXT")
     private String context;
 
-    @Column(name = "theme", nullable = false, length = 100)
-    private String theme;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id")
+    private ThemeEntity theme;
 
-    @Column(name = "custom_theme", length = 255)
-    private String customTheme;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "custom_theme_id")
+    private ThemesCustomsEntity customTheme;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "generation_id")
+    private GenerationEntity generation;
+
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

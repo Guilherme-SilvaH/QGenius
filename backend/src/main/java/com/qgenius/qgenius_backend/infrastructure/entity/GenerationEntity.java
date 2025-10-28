@@ -3,7 +3,8 @@ package com.qgenius.qgenius_backend.infrastructure.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,10 +17,7 @@ public class GenerationEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
@@ -43,8 +41,25 @@ public class GenerationEntity {
     private String status;
 
     @Column(name = "questions", columnDefinition = "jsonb")
-    private String questions; // JSONB armazenado como String
+    private String questions;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        if (status == null) {
+            status = "PENDING";
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
