@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring",

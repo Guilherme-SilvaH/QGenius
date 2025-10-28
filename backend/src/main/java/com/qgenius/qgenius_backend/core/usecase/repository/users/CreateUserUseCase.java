@@ -2,6 +2,7 @@ package com.qgenius.qgenius_backend.core.usecase.repository.users;
 
 import com.qgenius.qgenius_backend.core.domain.entity.User;
 import com.qgenius.qgenius_backend.core.domain.exception.EmailAlreadyExistsException;
+import com.qgenius.qgenius_backend.core.domain.exception.NotUsersExistsException;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.ICreateUserUseCase;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.IUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -26,7 +28,7 @@ public class CreateUserUseCase implements ICreateUserUseCase {
     @Transactional
     public User createUser(User user) {
         String email = user.getEmail().value();
-        log.debug("Creating user with email: {}", email);
+        log.info("Creating user with email: {}", email);
         if (userRepository.existsByEmail(email)) {
             log.warn("Attempt to create user with existing email: {}", email);
             throw new EmailAlreadyExistsException(email);
@@ -38,4 +40,5 @@ public class CreateUserUseCase implements ICreateUserUseCase {
 
         return savedUser;
     }
+
 }

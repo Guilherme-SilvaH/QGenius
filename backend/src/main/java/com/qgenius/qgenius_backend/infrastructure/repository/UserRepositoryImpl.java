@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,5 +62,12 @@ public class UserRepositoryImpl implements IUserRepository {
     public void delete(UUID id) {
         log.info("Deleting user with ID: {}", id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findAllUsers() {
+        return userRepository.findAll()
+                .stream().map(userMapper::toDomain).toList();
     }
 }
