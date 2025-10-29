@@ -22,6 +22,7 @@ public interface QuestionsMapper {
     @Mapping(source = "context", target = "context")
     @Mapping(source = "theme", target = "themes", qualifiedByName = "themeEntityToEnum")
     @Mapping(source = "customTheme", target = "themesCustoms", qualifiedByName = "themesCustomsEntityToDomain")
+    @Mapping(target = "generation", ignore = true)
     @Mapping(source = "user.id", target = "idUser")
     @Mapping(source = "createdAt", target = "createdAt")
     Questions toDomain(QuestionsEntity entity);

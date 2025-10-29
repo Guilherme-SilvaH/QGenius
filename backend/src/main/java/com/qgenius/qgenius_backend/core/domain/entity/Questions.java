@@ -21,5 +21,6 @@ public class Questions {
     private Themes themes;
     private ThemesCustoms themesCustoms;
     private UUID idUser;
+    private Generation generation;
     private LocalDateTime createdAt;
 }
