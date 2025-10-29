@@ -22,7 +22,6 @@ public class QuestionsRequest {
     @Size(max = 2000, message = "Context must be at most 2000 characters")
     private String context;
 
-    @NotNull(message = "Theme is required")
     private Themes themes;
 
     @Size(max = 255, message = "Custom theme must be at most 255 characters")

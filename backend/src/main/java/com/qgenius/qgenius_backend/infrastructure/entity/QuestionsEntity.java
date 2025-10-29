@@ -31,7 +31,7 @@ public class QuestionsEntity {
     @JoinColumn(name = "theme_id")
     private ThemeEntity theme;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "custom_theme_id")
     private ThemesCustomsEntity customTheme;
 

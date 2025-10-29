@@ -35,6 +35,10 @@ public class QuestionsRepositoryImpl implements IQuestionsRepository {
         questionsEntity.setUser(userEntity);
         questionsEntity.setTheme(theme);
 
+        if (questionsEntity.getCustomTheme() != null) {
+            questionsEntity.getCustomTheme().setUser(userEntity);
+        }
+
         QuestionsEntity savedEntity = questionsJpaRepository.save(questionsEntity);
 
         return questionsMapper.toDomain(savedEntity);
