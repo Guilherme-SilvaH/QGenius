@@ -6,6 +6,7 @@ import com.qgenius.qgenius_backend.core.domain.entity.User;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.ICreateGenerationUseCase;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.IGenerationRepository;
 import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.IQuestionGeneratorService;
+import com.qgenius.qgenius_backend.core.usecase.repository.interfaces.IThemeCustomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,11 @@ public class CreateGenerationUseCase implements ICreateGenerationUseCase {
 
     private final IGenerationRepository generationRepository;
     private final IQuestionGeneratorService questionGeneratorService;
+    private final IThemeCustomRepository themeCustomRepository;
 
     @Override
     @Transactional
     public List<Questions> generateQuestions(User user, String theme, String difficulty, String type, Integer quantity) {
-
         log.info("Creating generation for user {} with theme: {}", user.getId(), theme);
 
         Generation generation = Generation.builder()
@@ -47,12 +48,25 @@ public class CreateGenerationUseCase implements ICreateGenerationUseCase {
 
         try {
             log.info("Generating {} questions via IA service", quantity);
+            ThemeCustom themeCustom = themeCustomRepository
+                    .findByCustomThemesAndUserId(theme, user.getId())
+                    .orElseGet(() -> themeCustomRepository.save(
+                            ThemeCustom.builder()
+                                    .id(UUID.randomUUID())
+                                    .customThemes(theme)
+                                    .userId(user.getId())
+                                    .createdAt(LocalDateTime.now())
+                                    .build()
+                    ));
 
             List<Questions> questions = questionGeneratorService.generateQuestions(
                     theme, difficulty, type, quantity, user.getId()
             );
 
-            questions.forEach(q -> q.setGeneration(savedGeneration));
+            questions.forEach(q -> {
+                q.setGeneration(savedGeneration);
+                q.setCustomThemeId(themeCustom.getId());
+            });
 
             savedGeneration.setQuestionsList(questions);
             savedGeneration.setStatus("COMPLETED");
@@ -64,11 +78,9 @@ public class CreateGenerationUseCase implements ICreateGenerationUseCase {
 
         } catch (Exception e) {
             log.error("Failed to generate questions for generation {}", savedGeneration.getId(), e);
-
             savedGeneration.setStatus("FAILED");
             savedGeneration.setUpdatedAt(LocalDateTime.now());
             generationRepository.save(savedGeneration);
-
             throw new RuntimeException("Failed to generate questions: " + e.getMessage(), e);
         }
     }

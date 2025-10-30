@@ -1,8 +1,10 @@
 package com.qgenius.qgenius_backend.infrastructure.entity;
 
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class GenerationEntity {
     private String status;
 
     @Column(name = "questions", columnDefinition = "jsonb")
+    @Type(JsonBinaryType.class)
     private String questions;
 
     @OneToMany(mappedBy = "generation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

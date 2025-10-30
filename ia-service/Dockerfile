@@ -1,57 +1,21 @@
-# ========================
-# Estágio de dependências
-# ========================
-FROM node:20-alpine AS deps
+# 1. Use uma imagem base oficial do Node (versão 20 é estável e moderna)
+FROM node:20-alpine
 
+# 2. Defina o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar package.json e package-lock.json
+# 3. Copie o package.json (e package-lock.json) primeiro
+#    Isso otimiza o cache do Docker. Se só mudarmos o server.js,
+#    o Docker não vai rodar 'npm install' de novo.
 COPY package*.json ./
 
-# Instalar todas dependências (incluindo dev para build)
+# 4. Instale TODAS as dependências (incluindo devDependencies como nodemon)
 RUN npm install
 
-# ========================
-# Estágio de build
-# ========================
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Copiar node_modules do estágio anterior
-COPY --from=deps /app/node_modules ./node_modules
-# Copiar código fonte
+# 5. Copie o restante do código da aplicação
 COPY . .
 
-# Build arguments (exemplo: API_URL)
-ARG NEXT_PUBLIC_API_URL
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# 6. Exponha a porta que o app vai rodar (definida no .env)
+EXPOSE 3001
 
-# Build do Next.js em modo standalone
-RUN npm run build
-
-# ========================
-# Estágio final (runner)
-# ========================
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-# Criar usuário não-root
-RUN addgroup -g 1001 nodejs && adduser -D -u 1001 -G nodejs nodejs
-USER nodejs:nodejs
-
-# Copiar build standalone e arquivos necessários
-COPY --from=builder --chown=nodejs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nodejs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nodejs:nodejs /app/public ./public
-COPY --from=builder --chown=nodejs:nodejs /app/package.json ./package.json
-
-# Expor porta
-EXPOSE 3000
-
-# Comando para rodar o Next.js standalone
-CMD ["node", "server.js"]
+# 7. O comando para iniciar o app será definido no docker-compose.yml

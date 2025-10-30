@@ -1,0 +1,1 @@
+ALTER TABLE questions DROP CONSTRAINT IF EXISTS check_has_theme;
