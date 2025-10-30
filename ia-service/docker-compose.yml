@@ -1,0 +1,14 @@
+version: '3.8' # Versão do Docker Compose
+
+services:
+  api-ia:
+    build: . 
+    container_name: qgenius-api-ia
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./.env
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev
